@@ -6,6 +6,8 @@ import com.example.leaderboard.model.LeaderboardEntry;
 import com.example.leaderboard.model.PageResponse;
 import com.example.leaderboard.repository.GameRepository;
 import com.example.leaderboard.repository.LeaderboardRepository;
+import com.example.leaderboard.repository.memory.InMemoryGameRepository;
+import com.example.leaderboard.repository.memory.InMemoryLeaderboardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,8 +25,8 @@ class LeaderboardControllerTest {
 
     @BeforeEach
     void setUp() {
-        gameRepository = new GameRepository();
-        leaderboardRepository = new LeaderboardRepository();
+        gameRepository = new InMemoryGameRepository();
+        leaderboardRepository = new InMemoryLeaderboardRepository();
         controller = new LeaderboardController(leaderboardRepository, gameRepository);
     }
 

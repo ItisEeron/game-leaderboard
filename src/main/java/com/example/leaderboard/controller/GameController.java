@@ -3,6 +3,7 @@ package com.example.leaderboard.controller;
 import com.example.leaderboard.exception.GameNotFoundException;
 import com.example.leaderboard.model.Game;
 import com.example.leaderboard.repository.GameRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class GameController {
     }
 
     @PostMapping
-    public ResponseEntity<Game> create(@RequestBody Game game) {
+    public ResponseEntity<Game> create(@Valid @RequestBody Game game) {
         Game created = gameRepository.save(game.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }

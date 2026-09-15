@@ -1,9 +1,8 @@
 package com.example.leaderboard.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-@ResponseStatus(HttpStatus.NOT_FOUND)
+/**
+ * Status/body are set by {@link GlobalExceptionHandler}.
+ */
 public class GameNotFoundException extends RuntimeException {
 
     public GameNotFoundException(Long gameId) {

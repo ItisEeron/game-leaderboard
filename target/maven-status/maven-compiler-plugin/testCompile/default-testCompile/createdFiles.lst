@@ -1,1 +1,10 @@
 com/example/leaderboard/controller/LeaderboardControllerTest.class
+com/example/leaderboard/integration/DatabaseFailureIntegrationTest.class
+com/example/leaderboard/integration/UnknownErrorIntegrationTest$FailingRepositoryConfig.class
+com/example/leaderboard/integration/support/ThrowingLeaderboardRepository.class
+com/example/leaderboard/exception/GlobalExceptionHandlerTest.class
+com/example/leaderboard/integration/ConcurrencyIntegrationTest$ThrowingIntFunction.class
+com/example/leaderboard/integration/ConcurrencyIntegrationTest.class
+com/example/leaderboard/integration/DatabaseFailureIntegrationTest$FailingRepositoryConfig.class
+com/example/leaderboard/integration/UnknownErrorIntegrationTest.class
+com/example/leaderboard/integration/ErrorHandlingIntegrationTest.class

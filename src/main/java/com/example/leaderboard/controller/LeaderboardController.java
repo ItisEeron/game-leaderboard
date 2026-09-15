@@ -1,14 +1,15 @@
 package com.example.leaderboard.controller;
 
 import com.example.leaderboard.exception.GameNotFoundException;
+import com.example.leaderboard.exception.LeaderboardEntryNotFoundException;
 import com.example.leaderboard.model.LeaderboardEntry;
 import com.example.leaderboard.model.PageResponse;
 import com.example.leaderboard.repository.GameRepository;
 import com.example.leaderboard.repository.LeaderboardRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class LeaderboardController {
     @GetMapping("/{id}")
     public LeaderboardEntry getById(@PathVariable Long id) {
         return leaderboardRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Leaderboard entry not found: " + id));
+                .orElseThrow(() -> new LeaderboardEntryNotFoundException(id));
     }
 
     /**
@@ -50,7 +51,7 @@ public class LeaderboardController {
     }
 
     @PostMapping
-    public ResponseEntity<LeaderboardEntry> create(@RequestBody LeaderboardEntry entry) {
+    public ResponseEntity<LeaderboardEntry> create(@Valid @RequestBody LeaderboardEntry entry) {
         if (!gameRepository.existsById(entry.getGameId())) {
             throw new GameNotFoundException(entry.getGameId());
         }

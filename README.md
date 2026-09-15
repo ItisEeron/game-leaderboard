@@ -30,7 +30,15 @@ mvn test
 
 ## Storage
 
-Data is currently stored in-memory (`ConcurrentHashMap`) and resets on every restart. This will be replaced with a persistent database later.
+`GameRepository` and `LeaderboardRepository` are interfaces with two implementations, selected automatically at startup by `com.example.leaderboard.config.RepositoryConfig`:
+
+- **In-memory** (default) — backed by `ConcurrentHashMap`, data resets on every restart. Used whenever `spring.datasource.url` is not set.
+- **Database** (JPA/H2) — used automatically once `spring.datasource.url` is set. See `src/main/resources/application.properties` for the commented-out settings to enable a file-persisted H2 database. Swapping to Postgres/MySQL later is a matter of changing the driver/URL, not the code.
+
+### Known tradeoffs (beta)
+
+- **App-generated IDs**: both implementations assign ids in application code (an `AtomicLong`, seeded from the current max id in the database on startup for the JPA path) rather than using the database's native auto-increment. This keeps the two backends behaviorally identical for now, but it's a stopgap — it doesn't handle multiple app instances writing to the same database concurrently. Once we're past beta and standardize on the database backend, switch `Game`/`LeaderboardEntry` ids to `@GeneratedValue` and drop the in-repository id generators.
+- **Idle datasource when no database is configured**: because the H2 driver is on the classpath, Spring Boot still auto-configures its own (unused, ephemeral) embedded `DataSource`/connection pool at startup even when `spring.datasource.url` is unset — it's just never used, since `RepositoryConfig` picks the in-memory beans in that case. Harmless, but adds a bit of startup overhead.
 
 ## API Reference
 
