@@ -1,0 +1,9 @@
+/workspaces/game-leaderboard/src/main/java/com/example/leaderboard/GameLeaderboardApplication.java
+/workspaces/game-leaderboard/src/main/java/com/example/leaderboard/controller/GameController.java
+/workspaces/game-leaderboard/src/main/java/com/example/leaderboard/controller/LeaderboardController.java
+/workspaces/game-leaderboard/src/main/java/com/example/leaderboard/exception/GameNotFoundException.java
+/workspaces/game-leaderboard/src/main/java/com/example/leaderboard/model/Game.java
+/workspaces/game-leaderboard/src/main/java/com/example/leaderboard/model/LeaderboardEntry.java
+/workspaces/game-leaderboard/src/main/java/com/example/leaderboard/model/PageResponse.java
+/workspaces/game-leaderboard/src/main/java/com/example/leaderboard/repository/GameRepository.java
+/workspaces/game-leaderboard/src/main/java/com/example/leaderboard/repository/LeaderboardRepository.java
