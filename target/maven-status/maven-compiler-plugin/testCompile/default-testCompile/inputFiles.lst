@@ -3,5 +3,6 @@
 /workspaces/game-leaderboard/src/test/java/com/example/leaderboard/integration/ConcurrencyIntegrationTest.java
 /workspaces/game-leaderboard/src/test/java/com/example/leaderboard/integration/DatabaseFailureIntegrationTest.java
 /workspaces/game-leaderboard/src/test/java/com/example/leaderboard/integration/ErrorHandlingIntegrationTest.java
+/workspaces/game-leaderboard/src/test/java/com/example/leaderboard/integration/LeaderboardFeaturesIntegrationTest.java
 /workspaces/game-leaderboard/src/test/java/com/example/leaderboard/integration/UnknownErrorIntegrationTest.java
 /workspaces/game-leaderboard/src/test/java/com/example/leaderboard/integration/support/ThrowingLeaderboardRepository.java

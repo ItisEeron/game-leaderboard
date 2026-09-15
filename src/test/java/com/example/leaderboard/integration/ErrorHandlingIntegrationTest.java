@@ -98,4 +98,25 @@ class ErrorHandlingIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Game not found: 999999"));
     }
+
+    @Test
+    void getAll_negativePage_returns400() throws Exception {
+        mockMvc.perform(get("/api/leaderboard").param("page", "-1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("page must not be negative"));
+    }
+
+    @Test
+    void getAll_zeroSize_returns400() throws Exception {
+        mockMvc.perform(get("/api/leaderboard").param("size", "0"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("size must be at least 1"));
+    }
+
+    @Test
+    void getRankContext_nonExistentEntry_returns404() throws Exception {
+        mockMvc.perform(get("/api/leaderboard/999999/rank"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Leaderboard entry not found: 999999"));
+    }
 }

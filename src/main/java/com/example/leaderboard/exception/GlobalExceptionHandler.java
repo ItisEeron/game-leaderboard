@@ -1,5 +1,6 @@
 package com.example.leaderboard.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -39,6 +40,18 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining("; "));
         return error(HttpStatus.BAD_REQUEST, message.isBlank() ? "Invalid request body" : message);
+    }
+
+    /**
+     * Triggered by @Validated failures on @RequestParam/@PathVariable, e.g. a negative
+     * page or a size below 1.
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex) {
+        String message = ex.getConstraintViolations().stream()
+                .map(violation -> violation.getMessage())
+                .collect(Collectors.joining("; "));
+        return error(HttpStatus.BAD_REQUEST, message.isBlank() ? "Invalid request parameters" : message);
     }
 
     /**
