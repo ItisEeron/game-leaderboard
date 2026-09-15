@@ -62,6 +62,7 @@ Includes unit tests for the controllers/exception handling, and integration test
 
 - **App-generated IDs**: both implementations assign ids in application code (an `AtomicLong`, seeded from the current max id in the database on startup for the JPA path) rather than using the database's native auto-increment. This keeps the two backends behaviorally identical for now, but it's a stopgap — it doesn't handle multiple app instances writing to the same database concurrently. Once we're past beta and standardize on the database backend, switch `Game`/`LeaderboardEntry` ids to `@GeneratedValue` and drop the in-repository id generators.
 - **Idle datasource when no database is configured**: because the H2 driver is on the classpath, Spring Boot still auto-configures its own (unused, ephemeral) embedded `DataSource`/connection pool at startup even when `spring.datasource.url` is unset — it's just never used, since `RepositoryConfig` picks the in-memory beans in that case. Harmless, but adds a bit of startup overhead.
+- **No unique `userId`**: `LeaderboardEntry` only has `playerName`, a free-text string with no identity behind it. Nothing ties two submissions to the same underlying player, and two different people naming themselves the same string collide in the leaderboard with no way to tell them apart. A stable, unique `userId` (e.g. issued by an auth system) is needed before per-user features like idempotent-per-user submissions or "this user's rank across games" can be built correctly.
 
 ## API Reference
 
