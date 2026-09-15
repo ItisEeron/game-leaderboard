@@ -6,6 +6,8 @@
 /workspaces/game-leaderboard/src/main/java/com/example/leaderboard/exception/GameNotFoundException.java
 /workspaces/game-leaderboard/src/main/java/com/example/leaderboard/exception/GlobalExceptionHandler.java
 /workspaces/game-leaderboard/src/main/java/com/example/leaderboard/exception/LeaderboardEntryNotFoundException.java
+/workspaces/game-leaderboard/src/main/java/com/example/leaderboard/idempotency/CachedResponse.java
+/workspaces/game-leaderboard/src/main/java/com/example/leaderboard/idempotency/IdempotencyFilter.java
 /workspaces/game-leaderboard/src/main/java/com/example/leaderboard/model/Game.java
 /workspaces/game-leaderboard/src/main/java/com/example/leaderboard/model/LeaderboardContext.java
 /workspaces/game-leaderboard/src/main/java/com/example/leaderboard/model/LeaderboardEntry.java

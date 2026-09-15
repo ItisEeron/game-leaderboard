@@ -22,13 +22,34 @@ docker build -t game-leaderboard .
 docker run -p 8080:8080 game-leaderboard
 ```
 
+## Quick Start
+
+```bash
+# 1. Create a game
+curl -X POST localhost:8080/api/games -H "Content-Type: application/json" -d '{"name":"Chess"}'
+# => {"id":1,"name":"Chess"}
+
+# 2. Submit a score
+curl -X POST localhost:8080/api/leaderboard -H "Content-Type: application/json" \
+  -d '{"gameId":1,"playerName":"alice","score":90}'
+# => {"id":1,"gameId":1,"playerName":"alice","score":90,"submittedAt":"..."}
+
+# 3. See the ranked leaderboard for that game
+curl "localhost:8080/api/leaderboard/game/1?size=10"
+
+# 4. See one entry's rank and its neighbors
+curl localhost:8080/api/leaderboard/1/rank
+```
+
+See the API Reference below for the full endpoint list, and Idempotency/Error Handling for how retries and failures behave.
+
 ## Running tests
 
 ```bash
 mvn test
 ```
 
-Includes unit tests for the controllers/exception handling, and integration tests (`src/test/java/.../integration/`) that exercise the full HTTP stack: validation and not-found errors, simulated database outages and unknown failures, and concurrency races (simultaneous submissions, and a get/delete race on the same entry).
+Includes unit tests for the controllers/exception handling, and integration tests (`src/test/java/.../integration/`) that exercise the full HTTP stack: validation and not-found errors, simulated database outages and unknown failures, concurrency races (simultaneous submissions, and a get/delete race on the same entry), and idempotency (duplicate-request replay, concurrent duplicates, and that a failed request doesn't poison its key).
 
 ## Storage
 
@@ -155,6 +176,25 @@ curl -X DELETE http://localhost:8080/api/leaderboard/1
 ```
 
 Both return `204 No Content` on success, `404 Not Found` if the id doesn't exist.
+
+## Idempotency
+
+Any `POST` request (creating a game or a leaderboard entry) can carry an `Idempotency-Key` header. Retrying the same request with the same key returns the original response (with an `Idempotent-Replay: true` header) instead of creating a duplicate — useful when a client can't tell whether a prior request actually succeeded (e.g. after a dropped connection):
+
+```bash
+curl -X POST http://localhost:8080/api/leaderboard \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 3f1a2b4c-unique-per-logical-request" \
+  -d '{"gameId":1,"playerName":"alice","score":90}'
+```
+
+Notes:
+
+- The key is scoped per endpoint path, so reusing the same key value on `/api/games` and `/api/leaderboard` won't collide.
+- Only successful (2xx) responses are cached. A request that fails (e.g. validation error, unknown `gameId`) isn't cached against that key, so you can fix the problem and retry with the same key.
+- Concurrent requests carrying the same key are serialized — the second waits for the first to finish and replays its result, rather than both creating separate entries.
+- Omitting the header disables idempotency entirely for that request, preserving the original behavior (a duplicate request creates a duplicate entry).
+- The dedup store is in-memory and per app instance — see the architecture doc's Known Tradeoffs for what that means once this runs behind multiple instances.
 
 ## Error Handling
 
