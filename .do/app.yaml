@@ -1,0 +1,14 @@
+name: game-leaderboard
+services:
+  - name: api
+    dockerfile_path: Dockerfile
+    source_dir: /
+    github:
+      repo: ItisEeron/game-leaderboard
+      branch: main
+      deploy_on_push: true
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    routes:
+      - path: /
